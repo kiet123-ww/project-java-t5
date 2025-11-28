@@ -15,9 +15,11 @@ TKB Planner Pro là ứng dụng giúp sinh viên tìm kiếm và sắp xếp th
 
 ## Yêu cầu hệ thống
 
-- Java 17 trở lên
-- Maven 3.6+
-- JavaFX 21
+- **Java 17 trở lên** (bắt buộc)
+- **Maven Wrapper** (đã bao gồm trong dự án, không cần cài đặt)
+- **JavaFX 21** (tự động tải qua Maven)
+
+> **Lưu ý:** Dự án sử dụng Maven Wrapper, bạn không cần cài đặt Maven toàn cục. Maven sẽ được tải tự động khi chạy lần đầu.
 
 ## Cài đặt
 
@@ -29,34 +31,96 @@ TKB Planner Pro là ứng dụng giúp sinh viên tìm kiếm và sắp xếp th
 java -version
 ```
 
-### 2. Cài đặt Maven
-
-Đảm bảo bạn đã cài đặt Maven. Kiểm tra bằng lệnh:
-
-```bash
-mvn -version
-```
-
-### 3. Build dự án
-
-```bash
-cd java-t5
-mvn clean install
-```
+**Lưu ý:** Dự án sử dụng Maven Wrapper, không cần cài đặt Maven toàn cục.
 
 ## Cách chạy
 
-### Sử dụng Maven
+### Cách 1: Sử dụng Build Script (Khuyến nghị - Windows)
+
+Script `build.ps1` sẽ tự động tìm và thiết lập JAVA_HOME:
+
+```powershell
+# Build dự án
+powershell -ExecutionPolicy Bypass -File .\build.ps1 clean compile
+
+# Chạy ứng dụng
+powershell -ExecutionPolicy Bypass -File .\build.ps1 javafx:run
+
+# Package thành JAR
+powershell -ExecutionPolicy Bypass -File .\build.ps1 package
+```
+
+### Cách 2: Sử dụng Maven Wrapper trực tiếp
+
+#### Trên Windows:
+
+```powershell
+# Thiết lập JAVA_HOME (nếu chưa có)
+$env:JAVA_HOME = "C:\Program Files\Java\jdk-17"  # Thay đổi đường dẫn phù hợp
+
+# Build dự án
+.\mvnw.cmd clean compile
+
+# Chạy ứng dụng
+.\mvnw.cmd javafx:run
+
+# Package thành JAR
+.\mvnw.cmd package
+```
+
+#### Trên Linux/Mac:
 
 ```bash
+# Thiết lập JAVA_HOME (nếu chưa có)
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk  # Thay đổi đường dẫn phù hợp
+
+# Build dự án
+./mvnw clean compile
+
+# Chạy ứng dụng
+./mvnw javafx:run
+
+# Package thành JAR
+./mvnw package
+```
+
+### Cách 3: Nếu đã cài Maven toàn cục
+
+```bash
+# Build dự án
+mvn clean compile
+
+# Chạy ứng dụng
 mvn javafx:run
+
+# Package thành JAR
+mvn package
 ```
 
-### Hoặc chạy trực tiếp
+## Xử lý lỗi
 
+### Lỗi: JAVA_HOME not found
+
+Nếu gặp lỗi này, hãy thiết lập biến môi trường JAVA_HOME:
+
+**Windows (PowerShell):**
+```powershell
+$env:JAVA_HOME = "C:\Program Files\Java\jdk-17"  # Thay đổi đường dẫn phù hợp
+```
+
+**Windows (CMD):**
+```cmd
+set JAVA_HOME=C:\Program Files\Java\jdk-17
+```
+
+**Linux/Mac:**
 ```bash
-mvn compile exec:java -Dexec.mainClass="com.tkbplanner.Main"
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
 ```
+
+Để tìm đường dẫn Java của bạn:
+- Windows: `where java` hoặc kiểm tra trong `C:\Program Files\Java\`
+- Linux/Mac: `which java` hoặc `readlink -f $(which java)`
 
 ## Cấu trúc dự án
 
@@ -70,24 +134,34 @@ java-t5/
 │   ├── data/                        # Xử lý lưu/tải dữ liệu JSON
 │   └── ui/                          # Giao diện người dùng
 ├── src/main/resources/              # Tài nguyên (CSS, images)
+├── .mvn/wrapper/                    # Maven Wrapper files
 ├── pom.xml                          # Maven configuration
+├── mvnw.cmd                         # Maven Wrapper script (Windows)
+├── mvnw                             # Maven Wrapper script (Linux/Mac)
+├── build.ps1                        # Build script tự động (Windows)
+├── BUILD_INSTRUCTIONS.md            # Hướng dẫn build chi tiết
 └── README.md                        # File này
 ```
 
 ## Tính năng
 
-- ✅ Quản lý môn học và lớp học
+### Đã hoàn thành ✅
+- ✅ Quản lý môn học và lớp học (Backend)
 - ✅ Kiểm tra xung đột lịch học
 - ✅ Hỗ trợ môn tiên quyết
 - ✅ Hỗ trợ môn bắt buộc
-- ✅ Quản lý giờ bận
+- ✅ Quản lý giờ bận (Backend)
 - ✅ Tìm kiếm tất cả TKB hợp lệ
-- ✅ Hiển thị lịch dạng lưới với ngày tháng
 - ✅ Lưu/tải dữ liệu JSON
-- ✅ Lưu TKB ra file text
-- ✅ Tìm kiếm và lọc môn học
-- ✅ Sửa/xóa môn học
-- ✅ Chế độ sáng/tối (Dark/Light mode)
+- ✅ Build system với Maven Wrapper
+
+### Đang phát triển 🚧
+- 🚧 Giao diện người dùng đầy đủ (UI components)
+- 🚧 Hiển thị lịch dạng lưới với ngày tháng
+- 🚧 Lưu TKB ra file text
+- 🚧 Tìm kiếm và lọc môn học
+- 🚧 Sửa/xóa môn học qua UI
+- 🚧 Chế độ sáng/tối (Dark/Light mode)
 
 ## Phiên bản
 
